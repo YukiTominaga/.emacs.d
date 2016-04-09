@@ -2,6 +2,8 @@
 (setq load-path (cons "~/.emacs.d/packages/" load-path))
 ; 対応する括弧を光らせる
 (show-paren-mode t)
+; 閉じカッコの自動挿入
+(electric-pair-mode t)
 ; バックアップファイルを作らない
 (setq backup-inhibited t)
 (setq make-backup-files nil)
@@ -13,12 +15,17 @@
 ; 言語を日本語にする
 (set-language-environment 'Japanese)
 ; 改行時の自動インデントを無効に
-(electric-indent-mode -1)
+;(electric-indent-mode -1)
+(add-hook 'emacs-lisp-mode (electric-indent-mode -1))
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
+; undo C-z
+(define-key global-map "\C-z" 'undo)
 ; 問い合わせを簡略化 yes/no を y/n
 (fset 'yes-or-no-p 'y-or-n-p)
+; 補完時に大文字小文字を区別しない
+(setq completion-ignore-case t)
 ; 行番号
 (require 'linum)
 (global-set-key [f9] 'linum-mode)
@@ -43,6 +50,7 @@
 (define-key global-map (kbd "M-x")     'helm-M-x)
 (define-key global-map (kbd "C-x C-f") 'helm-find-files)
 (define-key global-map (kbd "C-x b")   'helm-buffers-list)
+(define-key global-map (kbd "C-h C-r") 'helm-recentf)
 ;; For helm-find-files etc.
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -59,11 +67,11 @@
 ;; インデント数
 (defun web-mode-hook ()
   "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset   2)
-  (setq web-mode-css-indent-offset    2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-java-offset   2)
-  (setq web-mode-asp-offset    2)
+  (setq web-mode-markup-indent-offset   3)
+  (setq web-mode-css-indent-offset    3)
+  (setq web-mode-code-indent-offset 3)
+  (setq web-mode-java-offset   3)
+  (setq web-mode-asp-offset    3)
 
   (setq web-mode-tag-auto-close-style 2)
   (setq web-mode-enable-auto-pairing t)
@@ -80,6 +88,9 @@
 (add-to-list 'load-path "~/.emacs.d/packages/js2-mode/")
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(define-key js2-mode-map (kbd "C-h C-f") 'js2-mode-hide-functions)
+(define-key js2-mode-map (kbd "C-s C-f") 'js2-mode-show-functions)
+(define-key js2-mode-map (kbd "RET")     'newline-and-indent)
 ;---------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -129,4 +140,20 @@
 (require 'init-open-recentf)
 (setq init-open-recentf-interface 'helm)
 (init-open-recentf)
+;------------------------------------------------
+; indent-guide
+;; From https://github.com/zk-phi/indent-guide.git
+;(add-to-list 'load-path "~/.emacs.d/packages/indent-guide/")
+;(require 'indent-guide)
+;(indent-guide-global-mode)
+;(setq indent-guide-recursive t)
+;------------------------------------------------
+; highlight-indentation
+;; From https://github.com/antonj/Highlight-Indentation-for-Emacs.git
+(add-to-list 'load-path "~/.emacs.d/packages/highlight-indentation/")
+(require 'highlight-indentation)
+(highlight-indentation-mode t)
+(setq highlight-indentation-offset 3)
+(add-hook 'js2-mode-hook 'highlight-indentation-mode)
+(set-face-background 'highlight-indentation-face "gray")
 ;------------------------------------------------
