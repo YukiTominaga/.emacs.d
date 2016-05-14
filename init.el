@@ -63,7 +63,7 @@
 ;; 拡張子
 (add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
 ;; インデント数
 (defun web-mode-hook ()
   "Hooks for Web mode."
@@ -82,6 +82,7 @@
   )
 )
 (add-hook 'web-mode-hook 'web-mode-hook)
+(define-key web-mode-map (kbd "RET") 'newline-and-indent)
 ;---------------------------------------
 ; js2-mode------------------------------
 ;; From https://github.com/mooz/js2-mode.git
@@ -92,6 +93,12 @@
 (define-key js2-mode-map (kbd "C-s C-f") 'js2-mode-show-functions)
 (define-key js2-mode-map (kbd "RET")     'newline-and-indent)
 ;---------------------------------------
+; php-mode
+;; From https://github.com/ejmr/php-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-mode")
+(require 'php-mode)
+(define-key php-mode-map (kbd "RET") 'newline-and-indent)
+;-------------------------------------- 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -156,4 +163,10 @@
 (setq highlight-indentation-offset 3)
 (add-hook 'js2-mode-hook 'highlight-indentation-mode)
 (set-face-background 'highlight-indentation-face "gray")
+;------------------------------------------------
+; ruby-mode
+(add-hook 'ruby-mode-hook
+	  '(lambda()
+	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+	     (define-key ruby-mode-map (kbd "C-RET") 'newline)))
 ;------------------------------------------------
