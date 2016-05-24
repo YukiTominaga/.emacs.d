@@ -63,7 +63,9 @@
 ;; 拡張子
 (add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.scss$"     . web-mode))
 ;(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 ;; インデント数
 (defun web-mode-hook ()
   "Hooks for Web mode."
@@ -77,8 +79,7 @@
   (setq web-mode-enable-auto-pairing t)
   ;; settings about aout-completion
   (setq web-mode-ac-sources-alist
-       	'(("css" . (ac-source-css-property))
-	  ("html" . (ac-source-words-in-buffer ac-source-abbrev)))
+       	'(("html" . (ac-source-words-in-buffer ac-source-abbrev)))
   )
 )
 (add-hook 'web-mode-hook 'web-mode-hook)
@@ -98,6 +99,11 @@
 (add-to-list 'load-path "~/.emacs.d/packages/php-mode")
 (require 'php-mode)
 (define-key php-mode-map (kbd "RET") 'newline-and-indent)
+;--------------------------------------
+; php-completion
+;; From https://github.com/suzuki/php-completion.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-completion")
+(require 'php-completion)
 ;-------------------------------------- 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -165,8 +171,22 @@
 (set-face-background 'highlight-indentation-face "gray")
 ;------------------------------------------------
 ; ruby-mode
+(add-to-list 'load-path "~/.emacs.d/packages/ruby-mode")
+(require 'ruby-mode)
 (add-hook 'ruby-mode-hook
 	  '(lambda()
 	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
 	     (define-key ruby-mode-map (kbd "C-RET") 'newline)))
+;------------------------------------------------
+; php-auto-yasnippets
+;; From https://github.com/ejmr/php-auto-yasnippets.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-auto-yasnippets/")
+(require 'php-auto-yasnippets)
+(setq php-auto-yasnippet-php-program "~/.emacs.d/packages/php-auto-yasnippets/Create-PHP-YASnippet.php")
+(define-key php-mode-map (kbd "C-c C-y") 'yas/creage-php-snippet)
+;------------------------------------------------
+; rinari
+;; From git://github.com/eschulte/rinari.git
+(add-to-list 'load-path "~/.emacs.d/packages/rinari")
+(require 'rinari)
 ;------------------------------------------------
