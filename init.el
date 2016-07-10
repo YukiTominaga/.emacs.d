@@ -16,7 +16,8 @@
 (set-language-environment 'Japanese)
 ; 改行時の自動インデントを無効に
 ;(electric-indent-mode -1)
-(add-hook 'emacs-lisp-mode (electric-indent-mode -1))
+(add-hook 'emacs-lisp-mode (electric-indent-mode -1)
+	  'lisp-mode (electric-indent-mode -1))
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
@@ -39,6 +40,8 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (global-auto-complete-mode t)
+(setq ac-delay 0.1)
+(setq ac-auto-show-menu 0.2)
 ;; 辞書の有効化
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/packages/auto-complete/dict")
 ;-------------------------------------
@@ -64,7 +67,7 @@
 (add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.scss$"     . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 ;; インデント数
 (defun web-mode-hook ()
@@ -74,12 +77,16 @@
   (setq web-mode-code-indent-offset 3)
   (setq web-mode-java-offset   3)
   (setq web-mode-asp-offset    3)
+  (setq web-mode-php-offset    3)
+  (setq web-mode-ruby-indentation 3)
 
   (setq web-mode-tag-auto-close-style 2)
   (setq web-mode-enable-auto-pairing t)
   ;; settings about aout-completion
   (setq web-mode-ac-sources-alist
-       	'(("html" . (ac-source-words-in-buffer ac-source-abbrev)))
+       	'(("html" . (ac-source-words-in-buffer ac-source-abbrev))
+	  ("css" . (ac-source-css-property))
+	  ("php" . (ac-source-php-completion)))
   )
 )
 (add-hook 'web-mode-hook 'web-mode-hook)
@@ -167,12 +174,13 @@
 (require 'highlight-indentation)
 (highlight-indentation-mode t)
 (setq highlight-indentation-offset 3)
-(add-hook 'js2-mode-hook 'highlight-indentation-mode)
+;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
 (set-face-background 'highlight-indentation-face "gray")
 ;------------------------------------------------
 ; ruby-mode
 (add-to-list 'load-path "~/.emacs.d/packages/ruby-mode")
 (require 'ruby-mode)
+(setq ruby-indent-tabs-mode t)
 (add-hook 'ruby-mode-hook
 	  '(lambda()
 	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
