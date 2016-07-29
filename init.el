@@ -12,11 +12,11 @@
 (setq delete-auto-save-files t)
 ; 極力UTF-8とする
 (prefer-coding-system 'utf-8)
+(set-default 'buffer-file-coding-system 'utf-8-with-signature)
 ; 言語を日本語にする
 (set-language-environment 'Japanese)
-; 改行時の自動インデントを無効に
-;(electric-indent-mode -1)
-(add-hook 'emacs-lisp-mode (electric-indent-mode -1))
+; 改行時の自動インデントをLispでのみ無効に
+(electric-indent-mode -1)
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
@@ -50,7 +50,7 @@
 (define-key global-map (kbd "M-x")     'helm-M-x)
 (define-key global-map (kbd "C-x C-f") 'helm-find-files)
 (define-key global-map (kbd "C-x b")   'helm-buffers-list)
-(define-key global-map (kbd "C-h C-r") 'helm-recentf)
+(define-key global-map (kbd "C-x C-r") 'helm-recentf)
 ;; For helm-find-files etc.
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -65,23 +65,33 @@
 (add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
 ;; インデント数
-(defun web-mode-hook ()
+(defun my-web-mode-hook ()
   "Hooks for Web mode."
   (setq web-mode-markup-indent-offset   3)
   (setq web-mode-css-indent-offset    3)
   (setq web-mode-code-indent-offset 3)
   (setq web-mode-java-offset   3)
   (setq web-mode-asp-offset    3)
+  (setq web-mode-php-offset    3)
 
   (setq web-mode-tag-auto-close-style 2)
   (setq web-mode-enable-auto-pairing t)
-  ;; settings about aout-completion
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-block-face t)
+  (setq web-mode-enable-heredoc-fontification t)
+  (setq web-mode-enable-current-element-highlight t)
+  ;(setq web-mode-enable-current-column-highlight t)
+;; settings about aout-completion
   (setq web-mode-ac-sources-alist
        	'(("css" . (ac-source-css-property))
-	  ("html" . (ac-source-words-in-buffer ac-source-abbrev)))
+	  ("html" . (ac-source-words-in-buffer ac-source-abbrev))
+	  ("php" . (ac-source-php-completion)))
   )
+  (electric-indent-local-mode t)
 )
-(add-hook 'web-mode-hook 'web-mode-hook)
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+(define-key web-mode-map (kbd "RET") 'newline-and-indent)
+(define-key web-mode-map (kbd "C-c C-_") 'web-mode-element-close)
 ;---------------------------------------
 ; js2-mode------------------------------
 ;; From https://github.com/mooz/js2-mode.git
@@ -91,6 +101,7 @@
 (define-key js2-mode-map (kbd "C-h C-f") 'js2-mode-hide-functions)
 (define-key js2-mode-map (kbd "C-s C-f") 'js2-mode-show-functions)
 (define-key js2-mode-map (kbd "RET")     'newline-and-indent)
+(setq js2-basic-offset 2)
 ;---------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -101,14 +112,13 @@
  '(menu-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(tooltip-mode nil)
-)
+ '(tooltip-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ )
  ;; window-mode settings
 (when window-system
     (create-fontset-from-ascii-font "Source Han Code JP-15:weight=normal:slant=normal" nil "hancode")
@@ -154,6 +164,30 @@
 (require 'highlight-indentation)
 (highlight-indentation-mode t)
 (setq highlight-indentation-offset 3)
-(add-hook 'js2-mode-hook 'highlight-indentation-mode)
+(setq web-mode-indentation-offset 3)
+;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
 (set-face-background 'highlight-indentation-face "gray")
+;------------------------------------------------
+;shell-mode
+(setq sh-basic-offset 2
+      sh-indentation 2
+      sh-indent-after-else 2
+      sh-indent-after-continuation 2)
+;------------------------------------------------
+;ruby-mode
+;;From https://github.com/jwiegley/ruby-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/ruby-mode")
+(require 'ruby-mode)
+(add-hook 'ruby-mode-hook
+          '(lambda()
+             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+             (define-key ruby-mode-map (kbd "C-RET") 'newline)
+	     (electric-indent-local-mode t)))
+;------------------------------------------------
+;php-mode
+;;From https://github.com/ejmr/php-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-mode")
+(add-to-list 'load-path "~/.emacs.d/packages/php-completion")
+(require 'php-mode)
+(require 'php-completion)
 ;------------------------------------------------
