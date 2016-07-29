@@ -17,6 +17,10 @@
 (set-language-environment 'Japanese)
 ; 改行時の自動インデントをLispでのみ無効に
 (electric-indent-mode -1)
+; 改行時の自動インデントを無効に
+;(electric-indent-mode -1)
+(add-hook 'emacs-lisp-mode (electric-indent-mode -1)
+	  'lisp-mode (electric-indent-mode -1))
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
@@ -39,8 +43,10 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (global-auto-complete-mode t)
+(setq ac-delay 0.1)
+(setq ac-auto-show-menu 0.2)
 ;; 辞書の有効化
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/packages/auto-complete/dict")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/packages/auto-complete/dict/")
 ;-------------------------------------
 ; helm--------------------------------
 ;; From https://github.com/emacs-helm/helm.git
@@ -62,8 +68,10 @@
 (require 'web-mode)
 ;; 拡張子
 (add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.scss$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 ;; インデント数
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
@@ -92,6 +100,31 @@
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 (define-key web-mode-map (kbd "RET") 'newline-and-indent)
 (define-key web-mode-map (kbd "C-c C-_") 'web-mode-element-close)
+    (setq web-mode-markup-indent-offset   3)
+    (setq web-mode-css-indent-offset      3)
+    (setq web-mode-code-indent-offset 3)
+    (setq web-mode-java-offset   3)
+    (setq web-mode-asp-offset    3)
+    (setq web-mode-php-offset    3)
+    (setq web-mode-ruby-indentation 3)
+
+    (setq web-mode-tag-auto-close-style 2)
+    (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-block-face t)
+    (setq web-mode-enable-heredoc-fontification t)
+    (setq web-mode-enable-current-element-highlight t)
+    (setq web-mode-enable-current-column-highlight t)
+)
+(add-hook 'web-mode-hook 'my-web-mode-hook)
+(define-key web-mode-map (kbd "RET") 'newline-and-indent)
+(define-key web-mode-map (kbd "C-c C-_") 'web-mode-element-close)
+;; settings about aout-completion
+(setq web-mode-ac-sources-alist
+      '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
+	;("css" . (ac-source-css-property))
+	("php" . (ac-source-php-completion))
+       )
+)
 ;---------------------------------------
 ; js2-mode------------------------------
 ;; From https://github.com/mooz/js2-mode.git
@@ -103,6 +136,17 @@
 (define-key js2-mode-map (kbd "RET")     'newline-and-indent)
 (setq js2-basic-offset 2)
 ;---------------------------------------
+; php-mode
+;; From https://github.com/ejmr/php-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-mode")
+(require 'php-mode)
+(define-key php-mode-map (kbd "RET") 'newline-and-indent)
+;--------------------------------------
+; php-completion
+;; From https://github.com/suzuki/php-completion.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-completion")
+(require 'php-completion)
+;-------------------------------------- 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -164,6 +208,7 @@
 (require 'highlight-indentation)
 (highlight-indentation-mode t)
 (setq highlight-indentation-offset 3)
+<<<<<<< HEAD
 (setq web-mode-indentation-offset 3)
 ;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
 (set-face-background 'highlight-indentation-face "gray")
@@ -190,4 +235,39 @@
 (add-to-list 'load-path "~/.emacs.d/packages/php-completion")
 (require 'php-mode)
 (require 'php-completion)
+=======
+;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
+(set-face-background 'highlight-indentation-face "gray")
+;------------------------------------------------
+; ruby-mode
+(add-to-list 'load-path "~/.emacs.d/packages/ruby-mode")
+(require 'ruby-mode)
+(setq ruby-indent-tabs-mode t)
+(add-hook 'ruby-mode-hook
+	  '(lambda()
+	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+	     (define-key ruby-mode-map (kbd "C-RET") 'newline)))
+;------------------------------------------------
+; php-auto-yasnippets
+;; From https://github.com/ejmr/php-auto-yasnippets.git
+(add-to-list 'load-path "~/.emacs.d/packages/php-auto-yasnippets/")
+(require 'php-auto-yasnippets)
+(setq php-auto-yasnippet-php-program "~/.emacs.d/packages/php-auto-yasnippets/Create-PHP-YASnippet.php")
+(define-key php-mode-map (kbd "C-c C-y") 'yas/creage-php-snippet)
+;------------------------------------------------
+; rinari
+;; From git://github.com/eschulte/rinari.git
+(add-to-list 'load-path "~/.emacs.d/packages/rinari")
+(require 'rinari)
+;------------------------------------------------
+; scss-mode
+;; From https://github.com/antonj/scss-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/scss-mode")
+(require 'scss-mode)
+(add-to-list 'auto-mode-alist '("\\.css\\'" . scss-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
+(autoload 'scss-mode "scss-mode")
+(setq scss-compile-at-save nil)
+(define-key global-map (kbd "RET") 'newline-and-indent)
+>>>>>>> d65625d4c0e0659cb4347907c18d55c2dac9631c
 ;------------------------------------------------
