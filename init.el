@@ -1,41 +1,50 @@
-; ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹
+; ¥í¡¼¥É¥Ñ¥¹
 (setq load-path (cons "~/.emacs.d/packages/" load-path))
-; å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’å…‰ã‚‰ã›ã‚‹
+; ÂĞ±ş¤¹¤ë³ç¸Ì¤ò¸÷¤é¤»¤ë
 (show-paren-mode t)
-; é–‰ã˜ã‚«ãƒƒã‚³ã®è‡ªå‹•æŒ¿å…¥
+; ÊÄ¤¸¥«¥Ã¥³¤Î¼«Æ°ÁŞÆş
 (electric-pair-mode t)
-; ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‰ãªã„
+; ¥Ğ¥Ã¥¯¥¢¥Ã¥×¥Õ¥¡¥¤¥ë¤òºî¤é¤Ê¤¤
 (setq backup-inhibited t)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
-; çµ‚äº†æ™‚ã«ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¶ˆã™
+; ½ªÎ»»ş¤Ë¥ª¡¼¥È¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤ò¾Ã¤¹
 (setq delete-auto-save-files t)
-; æ¥µåŠ›UTF-8ã¨ã™ã‚‹
+; ¶ËÎÏUTF-8¤È¤¹¤ë
 (prefer-coding-system 'utf-8)
-(set-default 'buffer-file-coding-system 'utf-8-with-signature)
-; è¨€èªã‚’æ—¥æœ¬èªã«ã™ã‚‹
+(set-default-coding-systems 'utf-8)
+; ¸À¸ì¤òÆüËÜ¸ì¤Ë¤¹¤ë
 (set-language-environment 'Japanese)
-; æ”¹è¡Œæ™‚ã®è‡ªå‹•ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’Lispã§ã®ã¿ç„¡åŠ¹ã«
-(electric-indent-mode -1)
-; æ”¹è¡Œæ™‚ã®è‡ªå‹•ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ç„¡åŠ¹ã«
+; ²ş¹Ô»ş¤Î¼«Æ°¥¤¥ó¥Ç¥ó¥È¤òÌµ¸ú¤Ë
 ;(electric-indent-mode -1)
 (add-hook 'emacs-lisp-mode (electric-indent-mode -1)
-	  'lisp-mode (electric-indent-mode -1))
-; commandã¨optionã®ãƒ¡ã‚¿ã‚­ãƒ¼å¤‰æ›´
+	    'lisp-mode (electric-indent-mode -1))
+; command¤Èoption¤Î¥á¥¿¥­¡¼ÊÑ¹¹
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
 ; undo C-z
 (define-key global-map "\C-z" 'undo)
-; å•ã„åˆã‚ã›ã‚’ç°¡ç•¥åŒ– yes/no ã‚’ y/n
+; Ìä¤¤¹ç¤ï¤»¤ò´ÊÎ¬²½ yes/no ¤ò y/n
 (fset 'yes-or-no-p 'y-or-n-p)
-; è£œå®Œæ™‚ã«å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
+; Êä´°»ş¤ËÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
 (setq completion-ignore-case t)
-; è¡Œç•ªå·
+; ¹ÔÈÖ¹æ
 (require 'linum)
 (global-set-key [f9] 'linum-mode)
-(global-linum-mode t)
-; ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’ä¸€è¡Œãšã¤ã«ã™ã‚‹
+;(global-linum-mode t)
+(setq linum-delay t)
+(defadvice linum-schedule (around my-linum-schedule () activate)
+    (run-with-idle-timer 0.2 nil #'linum-update-current))
+; ¥¹¥¯¥í¡¼¥ë¤ò°ì¹Ô¤º¤Ä¤Ë¤¹¤ë
 (setq scroll-step 1)
+; C-a³ÈÄ¥
+(defun my-goto-line-beginning-or-indent (&optional $position)
+  (interactive)
+  (or $position (setq $position (point)))
+  (let (($starting-position (progn (back-to-indentation) (point))))
+    (if (eq $starting-position $position)
+    (move-beginning-of-line 1))))
+(global-set-key (kbd "C-a") 'my-goto-line-beginning-or-indent)
 ; auto-complete-----------------------
 ;; From https://github.com/auto-complete/auto-complete.git
 (add-to-list 'load-path "~/.emacs.d/packages/auto-complete/")
@@ -45,7 +54,7 @@
 (global-auto-complete-mode t)
 (setq ac-delay 0.1)
 (setq ac-auto-show-menu 0.2)
-;; è¾æ›¸ã®æœ‰åŠ¹åŒ–
+;; ¼­½ñ¤ÎÍ­¸ú²½
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/packages/auto-complete/dict/")
 ;-------------------------------------
 ; helm--------------------------------
@@ -66,40 +75,14 @@
 ;; From https://github.com/fxbois/web-mode.git
 (add-to-list 'load-path "~/.emacs.d/packages/web-mode/")
 (require 'web-mode)
-;; æ‹¡å¼µå­
-(add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.scss$"     . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
+;; ³ÈÄ¥»Ò
+(add-to-list 'auto-mode-alist '("\\.html?$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-;; ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ•°
+(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+;; ¥¤¥ó¥Ç¥ó¥È¿ô
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset   3)
-  (setq web-mode-css-indent-offset    3)
-  (setq web-mode-code-indent-offset 3)
-  (setq web-mode-java-offset   3)
-  (setq web-mode-asp-offset    3)
-  (setq web-mode-php-offset    3)
-
-  (setq web-mode-tag-auto-close-style 2)
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-block-face t)
-  (setq web-mode-enable-heredoc-fontification t)
-  (setq web-mode-enable-current-element-highlight t)
-  ;(setq web-mode-enable-current-column-highlight t)
-;; settings about aout-completion
-  (setq web-mode-ac-sources-alist
-       	'(("css" . (ac-source-css-property))
-	  ("html" . (ac-source-words-in-buffer ac-source-abbrev))
-	  ("php" . (ac-source-php-completion)))
-  )
-  (electric-indent-local-mode t)
-)
-(add-hook 'web-mode-hook 'my-web-mode-hook)
-(define-key web-mode-map (kbd "RET") 'newline-and-indent)
-(define-key web-mode-map (kbd "C-c C-_") 'web-mode-element-close)
     (setq web-mode-markup-indent-offset   3)
     (setq web-mode-css-indent-offset      3)
     (setq web-mode-code-indent-offset 3)
@@ -107,13 +90,15 @@
     (setq web-mode-asp-offset    3)
     (setq web-mode-php-offset    3)
     (setq web-mode-ruby-indentation 3)
+    (setq web-mode-script-padding 3)
 
     (setq web-mode-tag-auto-close-style 2)
     (setq web-mode-enable-auto-pairing t)
+    (setq web-mode-enable-auto-closing t)
     (setq web-mode-enable-block-face t)
     (setq web-mode-enable-heredoc-fontification t)
     (setq web-mode-enable-current-element-highlight t)
-    (setq web-mode-enable-current-column-highlight t)
+    ;(setq web-mode-enable-current-column-highlight t)
 )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 (define-key web-mode-map (kbd "RET") 'newline-and-indent)
@@ -121,9 +106,19 @@
 ;; settings about aout-completion
 (setq web-mode-ac-sources-alist
       '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
-	;("css" . (ac-source-css-property))
 	("php" . (ac-source-php-completion))
        )
+)
+;; ¿§¤ÎÀßÄê
+(custom-set-faces
+  '(web-mode-doctype-face
+    ((t (:foreground "#82AE46"))))                          ; doctype
+  '(web-mode-html-tag-face
+    ((t (:foreground "#94ADE9" :weight bold))))             ; Í×ÁÇÌ¾
+  '(web-mode-html-attr-name-face
+    ((t (:foreground "#98A144"))))                          ; Â°À­Ì¾¤Ê¤É
+  '(web-mode-html-attr-value-face
+    ((t (:foreground "#D9333F"))))                          ; Â°À­ÃÍ
 )
 ;---------------------------------------
 ; js2-mode------------------------------
@@ -134,7 +129,6 @@
 (define-key js2-mode-map (kbd "C-h C-f") 'js2-mode-hide-functions)
 (define-key js2-mode-map (kbd "C-s C-f") 'js2-mode-show-functions)
 (define-key js2-mode-map (kbd "RET")     'newline-and-indent)
-(setq js2-basic-offset 2)
 ;---------------------------------------
 ; php-mode
 ;; From https://github.com/ejmr/php-mode.git
@@ -156,19 +150,20 @@
  '(menu-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(tooltip-mode nil))
+ '(tooltip-mode nil)
+)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
  ;; window-mode settings
 (when window-system
     (create-fontset-from-ascii-font "Source Han Code JP-15:weight=normal:slant=normal" nil "hancode")
     (set-fontset-font "fontset-hancode" 'unicode (font-spec :family "Source Han Code JP Light" :size 15) nil 'append)
     (add-to-list 'default-frame-alist '(font . "fontset-hancode"))
-    (set-frame-parameter nil 'fullscreen 'maximized) ;èµ·å‹•æ™‚æœ€å¤§åŒ–
+    (set-frame-parameter nil 'fullscreen 'maximized) ;µ¯Æ°»şºÇÂç²½
 )
 ;yasnippet---------------------------------------
 ;; From https://github.com/capitaomorte/yasnippet.git
@@ -177,20 +172,20 @@
 (yas-global-mode t)
 (setq yas-snippet-dirs
       '("~/.emacs.d/packages/yasnippet/snippets/"         ;the default snippets
-	"~/.emacs.d/packages/yasnippet/yasmate/snippets"  ;the yasmate snippets
-	"~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
+      "~/.emacs.d/packages/yasnippet/yasmate/snippets"  ;the yasmate snippets
+      "~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
        )
 )
-(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)       ;æ—¢å­˜ã‚¹ãƒ‹ãƒšãƒƒãƒˆã®æŒ¿å…¥
-(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)   ;æ—¢å­˜ã‚¹ãƒ‹ãƒšãƒƒãƒˆã®é–²è¦§ãƒ»ç·¨é›†
-(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)          ;æ–°è¦ã‚¹ãƒ‹ãƒšãƒƒãƒˆã‚’ä½œæˆ
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)       ;´ûÂ¸¥¹¥Ë¥Ú¥Ã¥È¤ÎÁŞÆş
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)   ;´ûÂ¸¥¹¥Ë¥Ú¥Ã¥È¤Î±ÜÍ÷¡¦ÊÔ½¸
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)          ;¿·µ¬¥¹¥Ë¥Ú¥Ã¥È¤òºîÀ®
 ;------------------------------------------------
 ; init-open-recentf
 ;; From https://github.com/zonuexe/init-open-recentf.el.git
 (add-to-list 'load-path "~/.emacs.d/packages/init-open-recentf.el/")
 (require 'recentf)
 (recentf-mode t)
-(setq recentf-max-menu-items 25)
+(setq recentf-max-menu-items 50)
 (require 'init-open-recentf)
 (setq init-open-recentf-interface 'helm)
 (init-open-recentf)
@@ -208,35 +203,7 @@
 (require 'highlight-indentation)
 (highlight-indentation-mode t)
 (setq highlight-indentation-offset 3)
-<<<<<<< HEAD
-(setq web-mode-indentation-offset 3)
-;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
-(set-face-background 'highlight-indentation-face "gray")
-;------------------------------------------------
-;shell-mode
-(setq sh-basic-offset 2
-      sh-indentation 2
-      sh-indent-after-else 2
-      sh-indent-after-continuation 2)
-;------------------------------------------------
-;ruby-mode
-;;From https://github.com/jwiegley/ruby-mode.git
-(add-to-list 'load-path "~/.emacs.d/packages/ruby-mode")
-(require 'ruby-mode)
-(add-hook 'ruby-mode-hook
-          '(lambda()
-             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
-             (define-key ruby-mode-map (kbd "C-RET") 'newline)
-	     (electric-indent-local-mode t)))
-;------------------------------------------------
-;php-mode
-;;From https://github.com/ejmr/php-mode.git
-(add-to-list 'load-path "~/.emacs.d/packages/php-mode")
-(add-to-list 'load-path "~/.emacs.d/packages/php-completion")
-(require 'php-mode)
-(require 'php-completion)
-=======
-;(add-hook 'js2-mode-hook 'highlight-indentation-mode)
+(add-hook 'js2-mode-hook 'highlight-indentation-mode)
 (set-face-background 'highlight-indentation-face "gray")
 ;------------------------------------------------
 ; ruby-mode
@@ -244,9 +211,9 @@
 (require 'ruby-mode)
 (setq ruby-indent-tabs-mode t)
 (add-hook 'ruby-mode-hook
-	  '(lambda()
-	     (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
-	     (define-key ruby-mode-map (kbd "C-RET") 'newline)))
+	    '(lambda()
+	         (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+		      (define-key ruby-mode-map (kbd "C-RET") 'newline)))
 ;------------------------------------------------
 ; php-auto-yasnippets
 ;; From https://github.com/ejmr/php-auto-yasnippets.git
@@ -264,10 +231,18 @@
 ;; From https://github.com/antonj/scss-mode.git
 (add-to-list 'load-path "~/.emacs.d/packages/scss-mode")
 (require 'scss-mode)
-(add-to-list 'auto-mode-alist '("\\.css\\'" . scss-mode))
+(add-to-list 'auto-mode-alist '("\\.css\\'"  . scss-mode))
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
 (autoload 'scss-mode "scss-mode")
 (setq scss-compile-at-save nil)
 (define-key global-map (kbd "RET") 'newline-and-indent)
->>>>>>> d65625d4c0e0659cb4347907c18d55c2dac9631c
+;------------------------------------------------
+; tern-mode
+;; From https://github.com/ternjs/tern.git
+(add-to-list 'load-path "~/.emacs.d/packages/tern/emacs")
+(require 'tern)
+(require 'tern-auto-complete)
+(autoload 'tern-mode "tern.el" nil t)
+(add-hook 'js2-mode-hook (lambda() (tern-mode t)))
+(add-hook 'web-mode-hook (lambda() (tern-mode t)))
 ;------------------------------------------------
