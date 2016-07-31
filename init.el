@@ -53,7 +53,7 @@
 (define-key global-map (kbd "M-x")     'helm-M-x)
 (define-key global-map (kbd "C-x C-f") 'helm-find-files)
 (define-key global-map (kbd "C-x b")   'helm-buffers-list)
-(define-key global-map (kbd "C-h C-r") 'helm-recentf)
+(define-key global-map (kbd "C-x C-r") 'helm-recentf)
 ;; For helm-find-files etc.
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -65,8 +65,6 @@
 (require 'web-mode)
 ;; 拡張子
 (add-to-list 'auto-mode-alist '("\\.html?$"   . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.css$"     . web-mode))
-;(add-to-list 'auto-mode-alist '("\\.scss$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php$"     . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 ;; インデント数
@@ -93,7 +91,6 @@
 ;; settings about aout-completion
 (setq web-mode-ac-sources-alist
       '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
-	;("css" . (ac-source-css-property))
 	("php" . (ac-source-php-completion))
        )
 )
