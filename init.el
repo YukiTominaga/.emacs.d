@@ -18,7 +18,7 @@
 ; 改行時の自動インデントを無効に
 ;(electric-indent-mode -1)
 (add-hook 'emacs-lisp-mode (electric-indent-mode -1)
-	    'lisp-mode (electric-indent-mode -1))
+        'lisp-mode (electric-indent-mode -1))
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
@@ -106,7 +106,7 @@
 ;; settings about aout-completion
 (setq web-mode-ac-sources-alist
       '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
-	("php" . (ac-source-php-completion))
+    ("php" . (ac-source-php-completion))
        )
 )
 ;; 色の設定
@@ -140,7 +140,7 @@
 ;; From https://github.com/suzuki/php-completion.git
 (add-to-list 'load-path "~/.emacs.d/packages/php-completion")
 (require 'php-completion)
-;-------------------------------------- 
+;--------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -211,9 +211,9 @@
 (require 'ruby-mode)
 (setq ruby-indent-tabs-mode t)
 (add-hook 'ruby-mode-hook
-	    '(lambda()
-	         (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
-		      (define-key ruby-mode-map (kbd "C-RET") 'newline)))
+        '(lambda()
+             (define-key ruby-mode-map (kbd "RET") 'newline-and-indent)
+              (define-key ruby-mode-map (kbd "C-RET") 'newline)))
 ;------------------------------------------------
 ; php-auto-yasnippets
 ;; From https://github.com/ejmr/php-auto-yasnippets.git
@@ -245,4 +245,10 @@
 (autoload 'tern-mode "tern.el" nil t)
 (add-hook 'js2-mode-hook (lambda() (tern-mode t)))
 (add-hook 'web-mode-hook (lambda() (tern-mode t)))
+;------------------------------------------------
+; dockerfile-mode
+;; From https://github.com/spotify/dockerfile-mode.git
+(add-to-list 'load-path "~/.emacs.d/packages/dockerfile-mode")
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 ;------------------------------------------------
