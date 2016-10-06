@@ -31,7 +31,7 @@
 ; 行番号
 (require 'linum)
 (global-set-key [f9] 'linum-mode)
-;(global-linum-mode t)
+(global-linum-mode t)
 (setq linum-delay t)
 (defadvice linum-schedule (around my-linum-schedule () activate)
     (run-with-idle-timer 0.2 nil #'linum-update-current))
@@ -45,6 +45,8 @@
     (if (eq $starting-position $position)
     (move-beginning-of-line 1))))
 (global-set-key (kbd "C-a") 'my-goto-line-beginning-or-indent)
+; indent
+(setq-default tab-width 4 indent-tabs-mode t)
 ; auto-complete-----------------------
 ;; From https://github.com/auto-complete/auto-complete.git
 (add-to-list 'load-path "~/.emacs.d/packages/auto-complete/")
@@ -70,6 +72,12 @@
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "M-; M-a") 'helm-select-action)
+;; helm-sub-command
+;;; cd path/to/helm
+;;; make
+;;; cd path/to/php-completion
+;;; emacs php-completion.el
+;;; s/helm-match-plugin/helm-multi-match
 ;-------------------------------------
 ; web-mode----------------------------
 ;; From https://github.com/fxbois/web-mode.git
@@ -83,14 +91,14 @@
 ;; インデント数
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset   3)
-    (setq web-mode-css-indent-offset      3)
-    (setq web-mode-code-indent-offset 3)
-    (setq web-mode-java-offset   3)
-    (setq web-mode-asp-offset    3)
-    (setq web-mode-php-offset    3)
-    (setq web-mode-ruby-indentation 3)
-    (setq web-mode-script-padding 3)
+    (setq web-mode-markup-indent-offset   4)
+    (setq web-mode-css-indent-offset      4)
+    (setq web-mode-code-indent-offset 4)
+    (setq web-mode-java-offset   4)
+    (setq web-mode-asp-offset    4)
+    (setq web-mode-php-offset    4)
+    (setq web-mode-ruby-indentation 4)
+    (setq web-mode-script-padding 4)
 
     (setq web-mode-tag-auto-close-style 2)
     (setq web-mode-enable-auto-pairing t)
@@ -251,4 +259,47 @@
 (add-to-list 'load-path "~/.emacs.d/packages/dockerfile-mode")
 (require 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+;------------------------------------------------
+; whitespace-mode
+(require 'whitespace)
+(setq whitespace-style '(face           ; faceで可視化
+                         trailing       ; 行末
+                         tabs           ; タブ
+                         spaces         ; スペース
+                         empty          ; 先頭/末尾の空行
+                         space-mark     ; 表示のマッピング
+                         tab-mark
+                         ))
+
+(setq whitespace-display-mappings
+      '((space-mark ?\u3000 [?\u25a1])))
+        ;; WARNING: the mapping below has a problem.
+        ;; When a TAB occupies exactly one column, it will display the
+        ;; character ?\xBB at that column followed by a TAB which goes to
+        ;; the next TAB column.
+        ;; If this is a problem for you, please, comment the line below.
+        ;(tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
+;; スペースは全角のみを可視化
+(setq whitespace-space-regexp "\\(\u3000+\\)")
+
+;; 保存前に自動でクリーンアップ
+;(setq whitespace-action '(auto-cleanup))
+
+(global-whitespace-mode 1)
+
+(defvar my/bg-color "#090909")
+(set-face-attribute 'whitespace-trailing nil
+                    :background my/bg-color
+                    :foreground "DeepPink"
+                    :underline t)
+(set-face-attribute 'whitespace-tab nil
+                    :background my/bg-color
+                    :foreground "LightSkyBlue"
+                    :underline t)
+(set-face-attribute 'whitespace-space nil
+                    :background my/bg-color
+                    :foreground "GreenYellow"
+                    :weight 'bold)
+(set-face-attribute 'whitespace-empty nil
+                    :background my/bg-color)
 ;------------------------------------------------
