@@ -1,43 +1,43 @@
-; ¥í¡¼¥É¥Ñ¥¹
+; ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹
 (setq load-path (cons "~/.emacs.d/packages/" load-path))
-; ÂĞ±ş¤¹¤ë³ç¸Ì¤ò¸÷¤é¤»¤ë
+; å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’å…‰ã‚‰ã›ã‚‹
 (show-paren-mode t)
-; ÊÄ¤¸¥«¥Ã¥³¤Î¼«Æ°ÁŞÆş
+; é–‰ã˜æ‹¬å¼§ã®è‡ªå‹•æŒ¿å…¥
 (electric-pair-mode t)
-; ¥Ğ¥Ã¥¯¥¢¥Ã¥×¥Õ¥¡¥¤¥ë¤òºî¤é¤Ê¤¤
+; ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã‚‰ãªã„
 (setq backup-inhibited t)
 (setq make-backup-files nil)
 (setq auto-save-default nil)
-; ½ªÎ»»ş¤Ë¥ª¡¼¥È¥»¡¼¥Ö¥Õ¥¡¥¤¥ë¤ò¾Ã¤¹
+; çµ‚äº†æ™‚ã«ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¶ˆã™
 (setq delete-auto-save-files t)
-; ¶ËÎÏUTF-8¤È¤¹¤ë
+; è¨€èªã‚’æ—¥æœ¬èªã«ã™ã‚‹
+(set-language-environment 'Japanese)
+; æ¥µåŠ›UTF-8ã¨ã™ã‚‹
 (prefer-coding-system 'utf-8)
 (set-default-coding-systems 'utf-8)
-; ¸À¸ì¤òÆüËÜ¸ì¤Ë¤¹¤ë
-(set-language-environment 'Japanese)
-; ²ş¹Ô»ş¤Î¼«Æ°¥¤¥ó¥Ç¥ó¥È¤òÌµ¸ú¤Ë
+; æ”¹è¡Œæ™‚ã®è‡ªå‹•ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ç„¡åŠ¹ã«
 ;(electric-indent-mode -1)
 (add-hook 'emacs-lisp-mode (electric-indent-mode -1)
         'lisp-mode (electric-indent-mode -1))
-; command¤Èoption¤Î¥á¥¿¥­¡¼ÊÑ¹¹
+; commandã¨optionã®ãƒ¡ã‚¿ã‚­ãƒ¼å¤‰æ›´
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
 ; undo C-z
 (define-key global-map "\C-z" 'undo)
-; Ìä¤¤¹ç¤ï¤»¤ò´ÊÎ¬²½ yes/no ¤ò y/n
+; å•ã„åˆã‚ã›ã‚’ç°¡ç•¥åŒ– yes/no ã‚’ y/n
 (fset 'yes-or-no-p 'y-or-n-p)
-; Êä´°»ş¤ËÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+; è£œå®Œæ™‚ã«å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 (setq completion-ignore-case t)
-; ¹ÔÈÖ¹æ
+; è¡Œç•ªå·
 (require 'linum)
 (global-set-key [f9] 'linum-mode)
 (global-linum-mode t)
 (setq linum-delay t)
 (defadvice linum-schedule (around my-linum-schedule () activate)
     (run-with-idle-timer 0.2 nil #'linum-update-current))
-; ¥¹¥¯¥í¡¼¥ë¤ò°ì¹Ô¤º¤Ä¤Ë¤¹¤ë
+; ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’1è¡Œã¥ã¤ã«ã™ã‚‹
 (setq scroll-step 1)
-; C-a³ÈÄ¥
+; C-aæ‹¡å¼µ
 (defun my-goto-line-beginning-or-indent (&optional $position)
   (interactive)
   (or $position (setq $position (point)))
@@ -56,7 +56,7 @@
 (global-auto-complete-mode t)
 (setq ac-delay 0.1)
 (setq ac-auto-show-menu 0.2)
-;; ¼­½ñ¤ÎÍ­¸ú²½
+;; è¾æ›¸ã®æœ‰åŠ¹åŒ–
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/packages/auto-complete/dict/")
 ;-------------------------------------
 ; helm--------------------------------
@@ -83,12 +83,12 @@
 ;; From https://github.com/fxbois/web-mode.git
 (add-to-list 'load-path "~/.emacs.d/packages/web-mode/")
 (require 'web-mode)
-;; ³ÈÄ¥»Ò
+;; æ‹¡å¼µå­
 (add-to-list 'auto-mode-alist '("\\.html?$" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php$"   . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
-;; ¥¤¥ó¥Ç¥ó¥È¿ô
+;; ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ•°
 (defun my-web-mode-hook ()
   "Hooks for Web mode."
     (setq web-mode-markup-indent-offset   4)
@@ -117,16 +117,16 @@
     ("php" . (ac-source-php-completion))
        )
 )
-;; ¿§¤ÎÀßÄê
+;; è‰²ã®è¨­å®š
 (custom-set-faces
   '(web-mode-doctype-face
     ((t (:foreground "#82AE46"))))                          ; doctype
   '(web-mode-html-tag-face
-    ((t (:foreground "#94ADE9" :weight bold))))             ; Í×ÁÇÌ¾
+    ((t (:foreground "#94ADE9" :weight bold))))             ; è¦ç´ å
   '(web-mode-html-attr-name-face
-    ((t (:foreground "#98A144"))))                          ; Â°À­Ì¾¤Ê¤É
+    ((t (:foreground "#98A144"))))                          ; å±æ€§åãªã©
   '(web-mode-html-attr-value-face
-    ((t (:foreground "#D9333F"))))                          ; Â°À­ÃÍ
+    ((t (:foreground "#D9333F"))))                          ; å±æ€§å€¤
 )
 ;---------------------------------------
 ; js2-mode------------------------------
@@ -171,7 +171,7 @@
     (create-fontset-from-ascii-font "Source Han Code JP-15:weight=normal:slant=normal" nil "hancode")
     (set-fontset-font "fontset-hancode" 'unicode (font-spec :family "Source Han Code JP Light" :size 15) nil 'append)
     (add-to-list 'default-frame-alist '(font . "fontset-hancode"))
-    (set-frame-parameter nil 'fullscreen 'maximized) ;µ¯Æ°»şºÇÂç²½
+    (set-frame-parameter nil 'fullscreen 'maximized) ;èµ·å‹•æ™‚æœ€å¤§åŒ–
 )
 ;yasnippet---------------------------------------
 ;; From https://github.com/capitaomorte/yasnippet.git
@@ -184,9 +184,9 @@
       "~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
        )
 )
-(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)       ;´ûÂ¸¥¹¥Ë¥Ú¥Ã¥È¤ÎÁŞÆş
-(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)   ;´ûÂ¸¥¹¥Ë¥Ú¥Ã¥È¤Î±ÜÍ÷¡¦ÊÔ½¸
-(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)          ;¿·µ¬¥¹¥Ë¥Ú¥Ã¥È¤òºîÀ®
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)       ;æ—¢å­˜ã‚¹ãƒ‹ãƒšãƒƒãƒˆã®æŒ¿å…¥
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)   ;æ—¢å­˜ã‚¹ãƒ‹ãƒšãƒƒãƒˆã®é–²è¦§ãƒ»ç·¨é›†
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)          ;æ–°è¦ã‚¹ãƒ‹ãƒšãƒƒãƒˆã‚’ä½œæˆ
 ;------------------------------------------------
 ; init-open-recentf
 ;; From https://github.com/zonuexe/init-open-recentf.el.git
@@ -262,12 +262,12 @@
 ;------------------------------------------------
 ; whitespace-mode
 (require 'whitespace)
-(setq whitespace-style '(face           ; face¤Ç²Ä»ë²½
-                         trailing       ; ¹ÔËö
-                         tabs           ; ¥¿¥Ö
-                         spaces         ; ¥¹¥Ú¡¼¥¹
-                         empty          ; ÀèÆ¬/ËöÈø¤Î¶õ¹Ô
-                         space-mark     ; É½¼¨¤Î¥Ş¥Ã¥Ô¥ó¥°
+(setq whitespace-style '(face           ; faceã§å¯è¦–åŒ–
+                         trailing       ; è¡Œæœ«
+                         tabs           ; ã‚¿ãƒ–
+                         spaces         ;  ã‚¹ãƒšãƒ¼ã‚¹
+                         empty          ; å…ˆé ­/æœ«å°¾ã®ç©ºè¡Œ
+                         space-mark     ; è¡¨ç¤ºã®ãƒãƒƒãƒ”ãƒ³ã‚°
                          tab-mark
                          ))
 
@@ -279,15 +279,15 @@
         ;; the next TAB column.
         ;; If this is a problem for you, please, comment the line below.
         ;(tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
-;; ¥¹¥Ú¡¼¥¹¤ÏÁ´³Ñ¤Î¤ß¤ò²Ä»ë²½
+;; ã‚¹ãƒšãƒ¼ã‚¹ã¯å…¨è§’ã®ã¿ã‚’å¯è¦–åŒ–
 (setq whitespace-space-regexp "\\(\u3000+\\)")
 
-;; ÊİÂ¸Á°¤Ë¼«Æ°¤Ç¥¯¥ê¡¼¥ó¥¢¥Ã¥×
+;; ä¿å­˜æ™‚ã«è‡ªå‹•ã§ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—
 ;(setq whitespace-action '(auto-cleanup))
 
 (global-whitespace-mode 1)
 
-(defvar my/bg-color "#090909")
+(defvar my/bg-color "#000000")
 (set-face-attribute 'whitespace-trailing nil
                     :background my/bg-color
                     :foreground "DeepPink"
