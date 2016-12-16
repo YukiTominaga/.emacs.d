@@ -3,3 +3,4 @@ auto-save-list/
 packages/
 recentf
 .DS_Store
+.cask/
