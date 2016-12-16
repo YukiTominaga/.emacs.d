@@ -239,3 +239,7 @@
 (set-face-attribute 'whitespace-empty nil
                     :background my/bg-color)
 ;------------------------------------------------
+; yml-mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+;------------------------------------------------
