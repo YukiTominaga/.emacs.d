@@ -101,9 +101,9 @@
       "~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
      )
 )
-(bind-key :map yas-minor-mode-map ("C-x i i" . yas-insert-snippet))     ;既存スニペットの挿入
-(bind-key :map yas-minor-mode-map ("C-x i v" . yas-visit-snippet-file)) ;既存スニペットの閲覧・編集
-(bind-key :map yas-minor-mode-map ("C-x i n" . yas-new-snippet))        ;既存スニペットの作成
+(bind-keys :map yas-minor-mode-map ("C-x i i" . yas-insert-snippet))     ;既存スニペットの挿入
+(bind-keys :map yas-minor-mode-map ("C-x i v" . yas-visit-snippet-file)) ;既存スニペットの閲覧・編集
+(bind-keys :map yas-minor-mode-map ("C-x i n" . yas-new-snippet))        ;既存スニペットの作成
 ; helm--------------------------------
 (require 'helm-config)
 (helm-mode t)
