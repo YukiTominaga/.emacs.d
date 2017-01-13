@@ -38,7 +38,7 @@
 (depends-on "js2-mode" :git "https://github.com/mooz/js2-mode.git")
 
 ; php-completion
-;(depends-on "php-completion" :git "https://github.com/suzuki/php-completion.git" :branch "develop")
+;(depends-on "php-completion" :git "https://github.com/suzuki/php-completion.git" :branch "feature/helm-version")
 
 ; rinari
 (depends-on "rinari" :git "git://github.com/eschulte/rinari.git")

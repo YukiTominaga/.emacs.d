@@ -4,8 +4,9 @@
 ;; You may delete these explanatory comments.
 ;;(package-initialize)
 
-; Cask
-(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
+; Cask cask.elのpathは環境に合わせてコメントアウト削除
+(require 'cask "~/.linuxbrew/Cellar/cask/0.8.1/cask.el")        ;Linuxbrew
+;(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el") ;Homebrew
 (cask-initialize)
 ; 対応する括弧を光らせる
 (show-paren-mode t)
@@ -92,13 +93,12 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
 ;yasnippet---------------------------------------
 ;; From https://github.com/capitaomorte/yasnippet.git
-(add-to-list 'load-path "~/.emacs.d/packages/yasnippet/")
 (require 'yasnippet)
 (yas-global-mode t)
 (setq yas-snippet-dirs
-    '("~/.emacs.d/packages/yasnippet/snippets/"         ;the default snippets
-      "~/.emacs.d/packages/yasnippet/yasmate/snippets"  ;the yasmate snippets
-      "~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
+    '("~/.emacs.d/snippets/default"         ;the default snippets
+      "~/.emacs.d/snippets/yasmate"  ;the yasmate snippets
+      "~/.emacs.d/snippets/personal" ;personal snippets
      )
 )
 (bind-keys :map yas-minor-mode-map ("C-x i i" . yas-insert-snippet))     ;既存スニペットの挿入
