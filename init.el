@@ -90,7 +90,20 @@
 (setq ac-auto-show-menu 0.2)
 ;; 辞書の有効化
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/dict/")
-;-------------------------------------
+;yasnippet---------------------------------------
+;; From https://github.com/capitaomorte/yasnippet.git
+(add-to-list 'load-path "~/.emacs.d/packages/yasnippet/")
+(require 'yasnippet)
+(yas-global-mode t)
+(setq yas-snippet-dirs
+    '("~/.emacs.d/packages/yasnippet/snippets/"         ;the default snippets
+      "~/.emacs.d/packages/yasnippet/yasmate/snippets"  ;the yasmate snippets
+      "~/.emacs.d/packages/yasnippet/personal-snippets" ;personal snippets
+     )
+)
+(bind-key :map yas-minor-mode-map ("C-x i i" . yas-insert-snippet))     ;既存スニペットの挿入
+(bind-key :map yas-minor-mode-map ("C-x i v" . yas-visit-snippet-file)) ;既存スニペットの閲覧・編集
+(bind-key :map yas-minor-mode-map ("C-x i n" . yas-new-snippet))        ;既存スニペットの作成
 ; helm--------------------------------
 (require 'helm-config)
 (helm-mode t)
@@ -139,7 +152,7 @@
 (define-key web-mode-map (kbd "RET") 'newline-and-indent)
 (define-key web-mode-map (kbd "C-c C-_") 'web-mode-element-close)
 ;; settings about auto-completion
-(setq web-mode-ac-sources-alist 
+(setq web-mode-ac-sources-alist
     '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
         ("php" . (ac-source-php-completion))
     )
