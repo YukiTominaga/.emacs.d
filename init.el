@@ -5,8 +5,8 @@
 ;;(package-initialize)
 
 ; Cask cask.elのpathは環境に合わせてコメントアウト削除
-(require 'cask "~/.linuxbrew/Cellar/cask/0.8.1/cask.el")        ;Linuxbrew
-;(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el") ;Homebrew
+;(require 'cask "~/.linuxbrew/Cellar/cask/0.8.1/cask.el")        ;Linuxbrew
+(require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el") ;Homebrew
 (cask-initialize)
 ; 対応する括弧を光らせる
 (show-paren-mode t)
@@ -27,12 +27,12 @@
 (add-hook 'emacs-lisp-mode-hook '(lambda () (electric-indent-local-mode -1)))
 (add-hook 'lisp-mode-hook       '(lambda () (electric-indent-local-mode -1)))
 ; 各モードのインデント設定
-(add-hook 'emacs-lisp-mode-hook '(lambda () (setq-default tab-width 2 indent-tabs-mode nil)))
+(add-hook 'emacs-lisp-mode-hook '(lambda () (setq-default tab-width 4 indent-tabs-mode nil)))
 ; commandとoptionのメタキー変更
 (setq mac-command-key-is-meta nil)
 (setq mac-option-modifier 'meta)
 ; undo C-z
-(bind-key "C-z" 'undo)
+(bind-key* "C-z" 'undo)
 ; 問い合わせを簡略化 yes/no を y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 ; 補完時に大文字小文字を区別しない
@@ -56,7 +56,7 @@
         )
     )
 )
-(bind-key "C-a" 'my-goto-line-beginning-or-indent)
+(bind-key* "C-a" 'my-goto-line-beginning-or-indent)
 ; Theme
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -86,7 +86,7 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
-(global-auto-complete-mode t)
+(global-auto-complete-mode -1)
 (setq ac-delay 0.1)
 (setq ac-auto-show-menu 0.2)
 ;; 辞書の有効化
@@ -205,7 +205,6 @@
 ;------------------------------------------------
 ; dockerfile-mode
 ;; From https://github.com/spotify/dockerfile-mode.git
-(add-to-list 'load-path "~/.emacs.d/packages/dockerfile-mode")
 (require 'dockerfile-mode)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 ;------------------------------------------------
@@ -255,4 +254,47 @@
 ; yml-mode
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+;------------------------------------------------
+; typescript-mode
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+;------------------------------------------------
+; tide-mode
+(require 'tide)
+(add-hook 'typescript-mode-hook
+  (lambda ()
+      (tide-setup)
+      (flycheck-mode t)
+      (setq flycheck-check-syntax-automatically '(save mode-enabled))
+      (eldoc-mode t)
+      (company-mode-on)
+  )
+)
+;------------------------------------------------
+; company
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+(bind-keys :map company-active-map ("TAB" . 'company-complete-common-or-cycle))
+(setq company-minimum-prefix-length 1) ;1文字補完
+(setq company-selection-wrap-around t) ;補完候補のループ選択
+;;色の設定
+(set-face-attribute 'company-tooltip nil
+                    :foreground "black"
+                    :background "lightgray")
+(set-face-attribute 'company-preview-common nil
+                    :foreground "dark gray"
+                    :background "black"
+                    :underline t)
+(set-face-attribute 'company-tooltip-selection nil
+                    :background "steelblue"
+                    :foreground "white")
+(set-face-attribute 'company-tooltip-common nil
+                    :foreground "black"
+                    :underline t)
+(set-face-attribute 'company-tooltip-common-selection nil
+                    :foreground "white"
+                    :background "steelblue"
+                    :underline t)
+(set-face-attribute 'company-tooltip-annotation nil
+                    :foreground "red")
 ;------------------------------------------------
