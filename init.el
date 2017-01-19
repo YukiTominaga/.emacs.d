@@ -260,16 +260,19 @@
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 ;------------------------------------------------
 ; tide-mode
+(add-to-list 'load-path "~/.emacs.d/packages/tide")
 (require 'tide)
 (add-hook 'typescript-mode-hook
   (lambda ()
-      (tide-setup)
-      (flycheck-mode t)
-      (setq flycheck-check-syntax-automatically '(save mode-enabled))
-      (eldoc-mode t)
-      (company-mode-on)
+    (interactive)
+    (tide-setup)
+    (flycheck-mode t)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode t)
+    (company-mode-on)
   )
 )
+(setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /var/log/tss.log"))
 ;------------------------------------------------
 ; company
 (require 'company)
