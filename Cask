@@ -55,11 +55,5 @@
 ; yaml-mode
 (depends-on "yaml-mode" :git "https://github.com/yoshiki/yaml-mode.git")
 
-; TypeScript
-(depends-on "typescript-mode" :git "https://github.com/ananthakumaran/typescript.el.git")
-
-; tide
-(depends-on "tide" :git "https://github.com/ananthakumaran/tide.git")
-
 ; company
 (depends-on "company" :git "https://github.com/company-mode/company-mode.git")
