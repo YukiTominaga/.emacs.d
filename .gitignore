@@ -4,3 +4,4 @@ packages/
 recentf
 .DS_Store
 .cask/
+**.log
