@@ -114,12 +114,6 @@
 ;; For helm-find-files etc.
 (bind-keys :map helm-read-file-map ("TAB" . helm-execute-persistent-action))
 (bind-keys :map helm-find-files-map ("TAB" . helm-execute-persistent-action))
-;; helm-sub-command
-;;; cd path/to/helm
-;;; make
-;;; cd path/to/php-completion
-;;; emacs php-completion.el
-;;; s/helm-match-plugin/helm-multi-match
 ;-------------------------------------
 ; web-mode----------------------------
 (require 'web-mode)
@@ -154,7 +148,6 @@
 ;; settings about auto-completion
 (setq web-mode-ac-sources-alist
     '(("html" . (ac-source-words-in-buffer ac-source-abbrev))
-        ("php" . (ac-source-php-completion))
     )
 )
 ;; 色の設定
@@ -176,11 +169,6 @@
 (define-key js2-mode-map (kbd "C-s C-f") 'js2-mode-show-functions)
 (define-key js2-mode-map (kbd "RET")     'newline-and-indent)
 ;---------------------------------------
-; php-completion
-;; From https://github.com/suzuki/php-completion.git
-(add-to-list 'load-path "~/.emacs.d/packages/php-completion")
-(require 'php-completion)
-;--------------------------------------
 ; ruby-mode
 (require 'ruby-mode)
 (setq ruby-indent-tabs-mode t)
