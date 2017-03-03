@@ -243,25 +243,6 @@
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 ;------------------------------------------------
-; typescript-mode
-(require 'typescript-mode)
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-;------------------------------------------------
-; tide-mode
-(add-to-list 'load-path "~/.emacs.d/packages/tide")
-(require 'tide)
-(add-hook 'typescript-mode-hook
-  (lambda ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode t)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode t)
-    (company-mode-on)
-  )
-)
-(setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /var/log/tss.log"))
-;------------------------------------------------
 ; company
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
